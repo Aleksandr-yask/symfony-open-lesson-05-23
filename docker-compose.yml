@@ -1,21 +1,40 @@
-version: '3'
+version: '3.7'
 
 services:
-###> doctrine/doctrine-bundle ###
-  database:
-    image: postgres:${POSTGRES_VERSION:-15}-alpine
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB:-app}
-      # You should definitely change the password in production
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
-      POSTGRES_USER: ${POSTGRES_USER:-app}
+  php-fpm:
+    build: docker
+    container_name: 'phps'
+    ports:
+      - '9000:9000'
     volumes:
-      - database_data:/var/lib/postgresql/data:rw
-      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-      # - ./docker/db/data:/var/lib/postgresql/data:rw
-###< doctrine/doctrine-bundle ###
+      - ./:/app
+    working_dir: /app
+
+  nginx:
+    image: nginx
+    container_name: 'nginxs'
+    working_dir: /app
+    ports:
+      - '8080:80'
+    volumes:
+      - ./:/app
+      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf
+
+  postgres:
+    image: postgres:15
+    ports:
+      - 15432:5432
+    container_name: 'postgresqls'
+    working_dir: /app
+    restart: always
+    environment:
+      POSTGRES_DB: 'twitter'
+      POSTGRES_USER: 'user'
+      POSTGRES_PASSWORD: 'password'
+    volumes:
+      - dump:/app/dump
+      - postgresql:/var/lib/postgresql/data
 
 volumes:
-###> doctrine/doctrine-bundle ###
-  database_data:
-###< doctrine/doctrine-bundle ###
+  dump:
+  postgresql:
