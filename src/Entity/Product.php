@@ -30,4 +30,9 @@ class Product
     {
         $this->name = $name;
     }
+
+    public function __toString(): string
+    {
+        return $this->name;
+    }
 }

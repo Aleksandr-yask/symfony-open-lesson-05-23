@@ -19,8 +19,9 @@ class Order
     #[ORM\JoinColumn(name: 'customer_id', referencedColumnName: 'id')]
     private Customer $customer;
 
-    #[ORM\ManyToMany(targetEntity: 'Product', mappedBy: 'followers')]
-    private Collection $products;
+    #[ORM\ManyToOne(targetEntity: Product::class)]
+    #[ORM\JoinColumn(name: 'product_id', referencedColumnName: 'id')]
+    private Product $product;
 
     #[ORM\ManyToOne(targetEntity: Restaurant::class)]
     #[ORM\JoinColumn(name: 'restaurant_id', referencedColumnName: 'id')]
@@ -29,5 +30,53 @@ class Order
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * @return Customer
+     */
+    public function getCustomer(): Customer
+    {
+        return $this->customer;
+    }
+
+    /**
+     * @param Customer $customer
+     */
+    public function setCustomer(Customer $customer): void
+    {
+        $this->customer = $customer;
+    }
+
+    /**
+     * @return Product
+     */
+    public function getProduct(): Product
+    {
+        return $this->product;
+    }
+
+    /**
+     * @param Product $product
+     */
+    public function setProduct(Product $product): void
+    {
+        $this->product = $product;
+    }
+
+    /**
+     * @return Restaurant
+     */
+    public function getRestaurant(): Restaurant
+    {
+        return $this->restaurant;
+    }
+
+    /**
+     * @param Restaurant $restaurant
+     */
+    public function setRestaurant(Restaurant $restaurant): void
+    {
+        $this->restaurant = $restaurant;
     }
 }

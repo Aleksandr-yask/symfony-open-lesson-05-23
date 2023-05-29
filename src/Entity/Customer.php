@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CustomerRepository;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
@@ -17,11 +18,11 @@ class Customer
     private string $name;
 
     #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
-    private string $createdAt;
+    private DateTime $createdAt;
 
     public function __construct()
     {
-        $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = new DateTime();
     }
 
     public function getId(): ?int
@@ -39,13 +40,18 @@ class Customer
         $this->name = $name;
     }
 
-    public function getCreatedAt(): string
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(string $createdAt): void
+    public function setCreatedAt(DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
+    }
+
+    public function __toString(): string
+    {
+        return $this->name;
     }
 }
